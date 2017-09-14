@@ -28,8 +28,8 @@ Y     = tf.placeholder(tf.float32, [None, None])
 
 
 
-sigK   = tf.get_variable('sigmaK',initializer=tf.constant(0.3))
-sigL   = tf.get_variable('sigmaL',initializer=tf.constant(0.3))
+sigK   = tf.get_variable('sigmaK',initializer=tf.constant(0.05))
+sigL   = tf.get_variable('sigmaL',initializer=tf.constant(0.05))
 clip_op1 = tf.assign(sigK, tf.clip_by_value(sigK, 1e-8, np.infty))
 clip_op2 = tf.assign(sigL, tf.clip_by_value(sigL, 1e-8, np.infty))
 
@@ -53,6 +53,7 @@ h0  = HSIC_TEST(hsic,0.05)
 test = TEST(h0)
 
 
+var = hsic.get_variance()
 val = h0.get_power()
 # val = h0.get_estimate()
 
@@ -68,17 +69,17 @@ other = A
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
-for idx in range(20):
-    # sess.run(clip_op1)
-    # sess.run(clip_op2)
-    res = val.eval(session=sess,feed_dict={X:x,Y:y})
-    newparamK = sigK.eval(session=sess)
-    newparamL  = sigL.eval(session=sess)
-    sess.run(opt,feed_dict={X:x,Y:y})
-    # print(mat.eval(session=sess,feed_dict={X:x}))
-    # print(A.eval(session=sess,feed_dict={X:x}))
+# sess.run(clip_op1)
+# sess.run(clip_op2)
+res = val.eval(session=sess,feed_dict={X:x,Y:y})
+res2 = var.eval(session=sess,feed_dict={X:x,Y:y})
+# newparamK = sigK.eval(session=sess)
+# newparamL  = sigL.eval(session=sess)
+# sess.run(opt,feed_dict={X:x,Y:y})
+# print(mat.eval(session=sess,feed_dict={X:x}))
+# print(A.eval(session=sess,feed_dict={X:x}))
 
-    print("The new Value is: %5.3f with params:%5.3f  and %5.3f "%(res,newparamK,newparamL))
+print("The Value is: %5.3f the var: %5.3f"%(res,res2))
 
 
 # print(mat.eval(session=sess,feed_dict={X:x,Y:y}))

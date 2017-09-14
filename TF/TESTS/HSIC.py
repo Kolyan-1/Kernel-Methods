@@ -83,6 +83,8 @@ class HSIC(object):
 
     def get_central_matrix(self):
         return self.__Ktil, self.__Ltil
+    def get_N(self):
+        return self.__N
     #
     # ##################################
 
@@ -205,9 +207,12 @@ class HSIC_TEST(object):
     #
     # Main Callable functions
     #
+    # def get_var(self):
+    #     return self.__measure.get_variance()
+
     def get_estimate(self):
         return self.__measure.get_estimate()
-        
+
     def get_treshold(self,get_dist=False,params=50):
         '''
         get's 1-alpha quantile of H0 distribution
@@ -254,7 +259,7 @@ class HSIC_TEST(object):
             dist[idx]   = self.__measure.get_estimate(perm_bool=True)
 
         # getting the treshold
-        self.__tresh = tf.stop_gradient(tf.contrib.distributions.percentile(dist,q=self.__alpha))
+        self.__tresh = tf.stop_gradient(tf.contrib.distributions.percentile(dist,q=self.__alpha*100))
 
         if get_dist:
             return dist
@@ -284,9 +289,9 @@ class HSIC_TEST(object):
         _            = self.__permutation_estimator() #sets self.tresh
 
         N            = self.__measure.get_N()
-        var          = tf.sqrt(self.__measure.get_variance())
+        std          = tf.sqrt(self.__measure.get_variance())
         dist         = tf.distributions.Normal(loc=0., scale=1.)
-        self.__power = dist.cdf(value=self.__measure.get_estimate()/var    -   self.__tresh/(N*var) )
+        self.__power = dist.cdf(value=self.__measure.get_estimate()/std    -   self.__tresh/(N*std) )
 
     def __calculate_power_stat_largeM(self):
         dist         = tf.distributions.Normal(loc=0., scale=1.)
@@ -297,8 +302,8 @@ class HSIC_TEST(object):
         _            = self.__permutation_estimator() #sets self.tresh
 
         N            = self.__measure.get_N()
-        var          = tf.sqrt(self.__measure.get_variance())
-        self.__tstat = self.__measure.get_estimate()/var    -   self.__tresh/(N*var)
+        std          = tf.sqrt(self.__measure.get_variance())
+        self.__tstat = self.__measure.get_estimate()/std    -   self.__tresh/(N*std)
 
 
     def __calculate_t_stat_largeM(self):

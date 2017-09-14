@@ -31,7 +31,7 @@ class TEST(object):
     # #######################################
     # Optimise over the following parameters
 
-    def learn_kernel(self,method='power',learning_rate=0.01):
+    def learn_kernel(self,method='tstat',learning_rate=0.01):
         '''
         finds the optimal kernel wrt to (power, test stat itself.. others maybe later)
 
@@ -42,7 +42,9 @@ class TEST(object):
             loss = -self.__test.get_power()
         elif method=='measure':
             loss = -self.__test.get_estimate()
+        elif method=='tstat':
+            loss = -self.__test.get_tstat(True)
         else:
-            loss = -self.__test.get_tstat()
+            loss = -self.__test.get_tstat(True)
         optimizer = tf.train.AdamOptimizer(learning_rate)
         return optimizer.minimize(loss)
