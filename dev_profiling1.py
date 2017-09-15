@@ -12,8 +12,8 @@
 
 from Data.synthetic1 import blobs, gaussian, circle
 from Utils.plotting  import plot2D, plot2
-from Kernels.Kernels import GAUSSIAN_KERNEL
-from TESTS.HSIC       import HSIC
+from NP.Kernels.Kernels import GAUSSIAN_KERNEL
+from NP.TESTS.HSIC       import HSIC
 
 import time
 
