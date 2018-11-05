@@ -1,4 +1,4 @@
-#MSc Thesis Code by Nikolai Rozanov (2017)
+# Kernel Library built on top of Tensorflow (still in progress)
 
 This code is a small library to perform statistical tests with Kernel Independence measures.
 So far the implementation only uses numpy and scipy (i.e. standard python libraries)
